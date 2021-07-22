@@ -1,0 +1,108 @@
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+
+version = project.mod_version
+group = project.mod_group
+archivesBaseName = "${project.mod_name}-${project.mc_version}-Forge"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+
+
+minecraft {
+
+    mappings channel: 'official', version: '1.17.1'
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                forgemod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                forgemod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            mods {
+                forgemod {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${project.fg_version}"
+}
+
+
+ext.themanifest = {
+    attributes([
+            "Specification-Title"     : project.mod_name,
+            "Specification-Vendor"    : project.mod_vendor,
+            "Specification-Version"   : "1",
+            "Implementation-Title"    : project.mod_name,
+            "Implementation-Version"  : project.mod_version,
+            "Implementation-Vendor"   : project.mod_implevendor,
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+    ])
+}
+
+
+jar {
+    manifest themanifest
+}
+
+task devJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+    manifest themanifest
+}
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'source'
+    manifest themanifest
+}
+artifacts {
+    archives devJar
+    archives sourceJar
+}
+jar.finalizedBy('reobfJar')
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+
