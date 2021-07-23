@@ -94,7 +94,7 @@ task devJar(type: Jar) {
 }
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
-    classifier = 'source'
+    classifier = 'sources'
     manifest themanifest
 }
 artifacts {
