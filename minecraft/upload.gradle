@@ -31,8 +31,8 @@ if (System.getenv('curesforgeapikey') != null && "${project.curesforge_id}" != '
 
             mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${project.mod_version}.jar")) {
                 displayName = "${project.mod_name}-${project.mc_version}-${project.mod_version}-${project.loader_type}"
-                relations {
-                    if ("${project.loader_type}" == 'Fabric') {
+                if ("${project.loader_type}" == 'Fabric') {
+                    relations {
                         requiredDependency 'fabric-api'
                         if ("${project.cloth_config_version}" != '')
                             embeddedLibrary 'cloth-config'
