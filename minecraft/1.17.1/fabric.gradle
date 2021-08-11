@@ -17,9 +17,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fc_version}"
 
     if (project.cloth_config_version != '')
-        modApi include("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-            exclude(group: "net.fabricmc.fabric-api")
-        }
+        modApi "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
 
     if (project.modmenu_version != '')
         modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
