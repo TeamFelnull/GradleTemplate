@@ -63,8 +63,15 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+repositories {
+    maven { url = "https://dvs1.progwml6.com/files/maven/" }//JEI
+    maven { url = "https://modmaven.dev/" }//JEI
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${project.fg_version}"
+    compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
 }
 
 ext.themanifest = {
