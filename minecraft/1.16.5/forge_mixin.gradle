@@ -3,13 +3,13 @@ apply from: "https://raw.githubusercontent.com/TeamFelnull/GradleTemplate/main/m
 apply plugin: 'org.spongepowered.mixin'
 
 minecraft {
-
+    def modid = project.mod_id
     mappings channel: 'official', version: '1.16.5'
 
     runs {
         client {
             workingDirectory project.file('run')
-            arg "-mixin.config=${project.mod_id}.mixins.json"
+            arg "-mixin.config=" + modid + ".mixins.json"
 
             property 'forge.logging.markers', 'REGISTRIES'
 
@@ -24,7 +24,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-            arg "-mixin.config=${project.mod_id}.mixins.json"
+            arg "-mixin.config=" + modid + ".mixins.json"
 
             property 'forge.logging.markers', 'REGISTRIES'
 
