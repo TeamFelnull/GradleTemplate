@@ -6,15 +6,12 @@ apply plugin: 'eclipse'
 version = project.mod_version
 group = project.mod_group
 archivesBaseName = "${project.mod_name}-${project.mc_version}-Forge"
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-
-
 minecraft {
 
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'official', version: '1.16.5'
 
     runs {
         client {
@@ -25,7 +22,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                forgemod {
+                examplemod {
                     source sourceSets.main
                 }
             }
@@ -39,7 +36,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                forgemod {
+                examplemod {
                     source sourceSets.main
                 }
             }
@@ -52,10 +49,10 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                forgemod {
+                examplemod {
                     source sourceSets.main
                 }
             }
