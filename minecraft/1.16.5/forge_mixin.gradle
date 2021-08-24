@@ -1,9 +1,19 @@
-apply from: "https://raw.githubusercontent.com/TeamFelnull/GradleTemplate/main/minecraft/1.16.5/forge.gradle"
+println 'Used ikisugi gradle template...'
 
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
 apply plugin: 'org.spongepowered.mixin'
 
+version = project.mod_version
+group = project.mod_group
+archivesBaseName = "${project.mod_name}-${project.mc_version}-Forge"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     def modid = project.mod_id
+
     mappings channel: 'official', version: '1.16.5'
 
     runs {
@@ -55,10 +65,53 @@ minecraft {
     }
 }
 
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    maven { url = "https://dvs1.progwml6.com/files/maven/" }//JEI
+    maven { url = "https://modmaven.dev/" }//JEI
+}
 
 dependencies {
+    minecraft "net.minecraftforge:forge:${project.fg_version}"
+    compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
     annotationProcessor 'org.spongepowered:mixin:0.8.3:processor'
 }
+
+ext.themanifest = {
+    attributes([
+            "Specification-Title"     : project.mod_name,
+            "Specification-Vendor"    : project.mod_vendor,
+            "Specification-Version"   : "1",
+            "Implementation-Title"    : project.mod_name,
+            "Implementation-Version"  : project.mod_version,
+            "Implementation-Vendor"   : project.mod_implevendor,
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs"            : "${project.mod_id}.mixins.json"
+    ])
+}
+
+jar {
+    manifest themanifest
+}
+
+task devJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+    manifest themanifest
+}
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+    manifest themanifest
+}
+artifacts {
+    archives devJar
+    archives sourceJar
+}
+jar.finalizedBy('reobfJar')
+
 
 mixin {
     add sourceSets.main, "${project.mod_id}.refmap.json"
