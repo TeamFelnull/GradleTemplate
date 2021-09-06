@@ -27,8 +27,6 @@ if (System.getenv('curesforgeapikey') != null && "${project.curesforge_id}" != '
             if ("${project.loader_type}" == 'Fabric')
                 addGameVersion 'Fabric'
 
-            addGameVersion 'Java 16'
-
             mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${project.mod_version}.jar")) {
                 displayName = "${project.mod_name}-${project.mc_version}-${project.mod_version}-${project.loader_type}"
                 if ("${project.loader_type}" == 'Fabric') {
@@ -37,6 +35,17 @@ if (System.getenv('curesforgeapikey') != null && "${project.curesforge_id}" != '
                         if ("${project.cloth_config_version}" != '')
                             requiredDependency 'cloth-config'
                     }
+                }
+                project.required_mods.split(",").each {
+                    String name -> requiredDependency name
+                }
+
+                project.optional_mods.split(",").each {
+                    String name -> optionalDependency name
+                }
+
+                project.embedded_mods.split(",").each {
+                    String name -> embeddedLibrary name
                 }
             }
             addArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${project.mod_version}-dev.jar")) {
