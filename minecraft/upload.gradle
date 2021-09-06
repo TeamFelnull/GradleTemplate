@@ -30,7 +30,7 @@ if (System.getenv('curesforgeapikey') != null && "${project.curesforge_id}" != '
             mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${project.mod_version}.jar")) {
                 displayName = "${project.mod_name}-${project.mc_version}-${project.mod_version}-${project.loader_type}"
 
-                if ("${project.loader_type}" == 'Fabric' || "${project.requiredDependency}" != '' || "${project.optionalDependency}" != '' || "${project.embeddedLibrary}" != '') {
+                if ("${project.loader_type}" == 'Fabric' || "${project.required_mods}" != '' || "${project.optional_mods}" != '' || "${project.embedded_mods}" != '') {
                     relations {
                         if ("${project.loader_type}" == 'Fabric') {
                             requiredDependency 'fabric-api'
@@ -38,19 +38,19 @@ if (System.getenv('curesforgeapikey') != null && "${project.curesforge_id}" != '
                                 requiredDependency 'cloth-config'
                         }
 
-                        if ("${project.requiredDependency}" != '') {
+                        if ("${project.required_mods}" != '') {
                             project.required_mods.split(",").each {
                                 String name -> requiredDependency name
                             }
                         }
 
-                        if ("${project.optionalDependency}" != '') {
+                        if ("${project.optional_mods}" != '') {
                             project.optional_mods.split(",").each {
                                 String name -> optionalDependency name
                             }
                         }
 
-                        if ("${project.embeddedLibrary}" != '') {
+                        if ("${project.embedded_mods}" != '') {
                             project.embedded_mods.split(",").each {
                                 String name -> embeddedLibrary name
                             }
@@ -58,7 +58,7 @@ if (System.getenv('curesforgeapikey') != null && "${project.curesforge_id}" != '
                     }
                 }
             }
-            
+
             addArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${project.mod_version}-dev.jar")) {
                 displayName = "${project.mod_name}-${project.mc_version}-${project.mod_version}-${project.loader_type}-dev"
             }
