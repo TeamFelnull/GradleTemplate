@@ -38,23 +38,27 @@ if (System.getenv('curesforgeapikey') != null && "${project.curesforge_id}" != '
                                 requiredDependency 'cloth-config'
                         }
 
-                        if ("${project.requiredDependency}" != '')
+                        if ("${project.requiredDependency}" != '') {
                             project.required_mods.split(",").each {
                                 String name -> requiredDependency name
                             }
+                        }
 
-                        if ("${project.optionalDependency}" != '')
+                        if ("${project.optionalDependency}" != '') {
                             project.optional_mods.split(",").each {
                                 String name -> optionalDependency name
                             }
+                        }
 
-                        if ("${project.embeddedLibrary}" != '')
+                        if ("${project.embeddedLibrary}" != '') {
                             project.embedded_mods.split(",").each {
                                 String name -> embeddedLibrary name
                             }
+                        }
                     }
                 }
             }
+            
             addArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${project.mod_version}-dev.jar")) {
                 displayName = "${project.mod_name}-${project.mc_version}-${project.mod_version}-${project.loader_type}-dev"
             }
