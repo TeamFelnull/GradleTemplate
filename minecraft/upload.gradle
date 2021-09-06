@@ -27,6 +27,9 @@ if (System.getenv('curesforgeapikey') != null && "${project.curesforge_id}" != '
             if ("${project.loader_type}" == 'Fabric')
                 addGameVersion 'Fabric'
 
+            if (JavaVersion.current().ordinal() + 1 >= 16)
+                addGameVersion Java 16
+
             mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${project.mod_version}.jar")) {
                 displayName = "${project.mod_name}-${project.mc_version}-${project.mod_version}-${project.loader_type}"
 
