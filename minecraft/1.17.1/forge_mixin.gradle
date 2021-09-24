@@ -115,5 +115,5 @@ artifacts {
     archives sourceJar
 }
 mixin {
-    add sourceSets.main, "memoryusagescreen.refmap.json"
+    add sourceSets.main, "${project.mod_id}.refmap.json"
 }
