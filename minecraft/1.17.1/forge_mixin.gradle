@@ -116,4 +116,4 @@ artifacts {
 }
 mixin {
     add sourceSets.main, "${project.mod_id}.refmap.json"
-}
+} 
