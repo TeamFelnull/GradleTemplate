@@ -1,0 +1,36 @@
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            def loaderex = project.loader_type == '' ? '' : ('-' + project.loader_type.toLowerCase());
+            artifactId = project.mod_id + loaderex
+            artifact jar
+            pom {
+                name = project.mod_name
+                description = project.maven_description
+                licenses {
+                    license {
+                        name = project.maven_license_name
+                        url = project.maven_license_url
+                    }
+                }
+                developers {
+                    developer {
+                        id = project.maven_developer_name
+                        name = project.maven_developer_id
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "https://maven.felnull.dev/"
+            credentials {
+                username = project.maven_username == '' ? System.getenv('mavenname') : project.maven_username
+                password = project.maven_password == '' ? System.getenv('mavenpassword') : project.maven_password
+            }
+        }
+    }
+}
