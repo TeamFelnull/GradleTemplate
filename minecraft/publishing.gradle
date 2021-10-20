@@ -28,7 +28,7 @@ publishing {
         maven {
             url "https://maven.felnull.dev/"
             credentials {
-                username = project.maven_username == '' ? System.getenv('mavenname') : project.maven_username
+                username = 'felnull'
                 password = project.maven_password == '' ? System.getenv('mavenpassword') : project.maven_password
             }
         }
