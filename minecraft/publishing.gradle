@@ -5,7 +5,11 @@ publishing {
         mavenJava(MavenPublication) {
             def loaderex = project.loader_type == '' ? '' : ('-' + project.loader_type.toLowerCase());
             artifactId = project.mod_id + loaderex
-            artifact jar
+            if (project.loader_type == 'Fabric') {
+                artifact(remapJar)
+            } else {
+                artifact jar
+            }
             pom {
                 name = project.mod_name
                 description = project.maven_description
