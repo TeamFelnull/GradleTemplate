@@ -26,7 +26,6 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
 
-
             mods {
                 examplemod {
                     source sourceSets.main
@@ -76,8 +75,12 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${project.fg_version}"
-    compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
+
+    if (project.jei_version != '') {
+        compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
+        runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
+    }
+
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
 
