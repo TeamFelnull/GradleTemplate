@@ -1,0 +1,120 @@
+println 'Used ikisugi gradle template...'
+
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'org.spongepowered.mixin'
+
+version = project.mod_version
+group = project.mod_group
+archivesBaseName = "${project.mod_name}-${project.mc_version}-Forge"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+minecraft {
+    def modid = project.mod_id
+
+    mappings channel: 'official', version: '1.18'
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            arg "-mixin.config=" + modid + ".mixins.json"
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            arg "-mixin.config=" + modid + ".mixins.json"
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', "${project.mod_id}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    maven { url = "https://dvs1.progwml6.com/files/maven/" }//JEI
+    maven { url = "https://modmaven.dev/" }//JEI
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${project.fg_version}"
+    compileOnly fg.deobf("mezz.jei:jei-${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${jei_version}")
+    annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
+}
+
+jar.finalizedBy('reobfJar')
+
+ext.themanifest = {
+    attributes([
+            "Specification-Title"     : project.mod_name,
+            "Specification-Vendor"    : project.mod_vendor,
+            "Specification-Version"   : "1",
+            "Implementation-Title"    : project.mod_name,
+            "Implementation-Version"  : project.mod_version,
+            "Implementation-Vendor"   : project.mod_implevendor,
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs"            : "${project.mod_id}.mixins.json"
+    ])
+}
+
+jar {
+    manifest themanifest
+}
+
+task devJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+    manifest themanifest
+}
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+    manifest themanifest
+}
+artifacts {
+    archives devJar
+    archives sourceJar
+}
+
+mixin {
+    add sourceSets.main, "${project.mod_id}.refmap.json"
+}
